@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>連絡バス運行情報（南大沢⇔日野）</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="page-header">
+    <h1>2025年度後期 連絡バス運行情報（南大沢キャンパス ⇔ 日野キャンパス）</h1>
+    <p class="small-note">※このページは提供されたPDF資料（2025年度後期運行日程表・時刻表）を基に作成しています。</p>
+  </header>
+
+  <main>
+    <section class="today" aria-labelledby="today-heading">
+      <h2 id="today-heading">本日の運行状況と次のバス</h2>
+      <div class="today-summary">
+        <div class="today-status">
+          <p class="date" id="today-date"></p>
+          <p class="status" id="today-status"></p>
+          <p class="note" id="today-note"></p>
+        </div>
+        <div class="next-bus">
+          <div>
+            <h3>南大沢 ▶ 日野</h3>
+            <p id="next-from-minami" class="next-time"></p>
+          </div>
+          <div>
+            <h3>日野 ▶ 南大沢</h3>
+            <p id="next-from-hino" class="next-time"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="timetable" aria-labelledby="timetable-heading">
+      <h2 id="timetable-heading">本日の時刻表</h2>
+      <p class="small-note" id="timetable-description"></p>
+      <div id="timetable-wrapper" class="timetable-card"></div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>最終更新：2025年9月版資料</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

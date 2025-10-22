@@ -1,0 +1,194 @@
+:root {
+  color-scheme: light dark;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f6f6fb;
+  --text-primary: #1f2933;
+  --text-secondary: #4b5563;
+  --border-color: #d1d5db;
+  --normal: #efb6ff;
+  --hino-full: #c99fff;
+  --hino-pm: #d9c6ff;
+  --one-bus: #ffeb72;
+  --no-service: #e5e7eb;
+  --accent: #6b21a8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #111827;
+    --bg-secondary: #1f2937;
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --border-color: #374151;
+    --normal: #a855f7;
+    --hino-full: #7c3aed;
+    --hino-pm: #8b5cf6;
+    --one-bus: #facc15;
+    --no-service: #4b5563;
+    --accent: #c084fc;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+main {
+  display: grid;
+  gap: 2.5rem;
+  padding: 2rem clamp(1rem, 5vw, 4rem) 3rem;
+}
+
+.page-header,
+.page-footer {
+  padding: 1.5rem clamp(1rem, 5vw, 4rem);
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.page-footer {
+  border-top: 1px solid var(--border-color);
+  border-bottom: none;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.page-header h1 {
+  margin: 0 0 0.4rem;
+  font-size: clamp(1.4rem, 2.5vw, 2.1rem);
+  font-weight: 700;
+}
+
+.small-note {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.today {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.today-summary {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.today-status .date {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.today-status .status {
+  margin: 0.2rem 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.today-status .note {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.next-bus {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.next-bus h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.next-time {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0.25rem 0 0;
+}
+
+.timetable {
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  background-color: var(--bg-secondary);
+}
+
+.timetable-card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.2rem;
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.timetable-card header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.timetable-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.timetable-card .badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1f2933;
+}
+
+.timetable-card .notes {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.timetable-card table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.timetable-card th,
+.timetable-card td {
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.timetable-card th {
+  background-color: var(--bg-secondary);
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .today {
+    padding: 1.2rem;
+  }
+
+  .timetable {
+    padding: 1.2rem;
+  }
+}
