@@ -14,7 +14,19 @@
 
   <main>
     <section class="today" aria-labelledby="today-heading">
-      <h2 id="today-heading">本日の運行状況と次のバス</h2>
+      <h2 id="today-heading">選択中の日付の運行状況と次のバス</h2>
+
+      <form class="date-selector" aria-label="表示する日付の選択">
+        <div class="date-selector__label">
+          <label for="selected-date">表示する日付</label>
+          <p class="small-note">資料に掲載されている期間（2025年10月〜2026年3月）から選択できます。</p>
+        </div>
+        <div class="date-selector__controls">
+          <input type="date" id="selected-date" name="selected-date">
+          <button type="button" id="reset-date">今日に戻す</button>
+        </div>
+      </form>
+
       <div class="today-summary">
         <div class="today-status">
           <p class="date" id="today-date"></p>
@@ -35,7 +47,7 @@
     </section>
 
     <section class="timetable" aria-labelledby="timetable-heading">
-      <h2 id="timetable-heading">本日の時刻表</h2>
+      <h2 id="timetable-heading">選択中の日付の時刻表</h2>
       <p class="small-note" id="timetable-description"></p>
       <div id="timetable-wrapper" class="timetable-card"></div>
     </section>

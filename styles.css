@@ -1,0 +1,264 @@
+:root {
+  color-scheme: only light;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f7fb;
+  --text-primary: #1b1b1f;
+  --text-secondary: #4a5568;
+  --border-color: #e2e8f0;
+  --normal: #dbeafe;
+  --hino-full: #bfdbfe;
+  --hino-pm: #e0f2fe;
+  --one-bus: #fef9c3;
+  --no-service: #f4f4f5;
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+main {
+  display: grid;
+  gap: 2.5rem;
+  padding: 2rem clamp(1rem, 5vw, 4rem) 3rem;
+}
+
+
+.page-header {
+  padding: 1.5rem clamp(1rem, 5vw, 4rem);
+  background: linear-gradient(135deg, rgba(226, 232, 240, 0.7), rgba(219, 234, 254, 0.5));
+  border-bottom: 1px solid var(--border-color);
+}
+
+.page-footer {
+  padding: 1.5rem clamp(1rem, 5vw, 4rem);
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  border-bottom: none;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.page-header h1 {
+  margin: 0 0 0.4rem;
+  font-size: clamp(1.4rem, 2.5vw, 2.1rem);
+  font-weight: 700;
+}
+
+.small-note {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.today {
+  background-color: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.8rem;
+  display: grid;
+  gap: 1.5rem;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+}
+
+.date-selector {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.9rem;
+  background-color: var(--bg-secondary);
+}
+
+.date-selector__label {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.date-selector__label label {
+  font-weight: 600;
+}
+
+.date-selector__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.date-selector input[type="date"] {
+  font: inherit;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.6rem;
+  background-color: #fff;
+  color: var(--text-primary);
+  min-width: 210px;
+}
+
+.date-selector button {
+  font: inherit;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.date-selector button:hover,
+.date-selector button:focus-visible {
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+  transform: translateY(-1px);
+}
+
+.date-selector button:focus-visible {
+  outline: none;
+}
+
+.date-selector button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.today-summary {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.today-status .date {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.today-status .status {
+  margin: 0.2rem 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.today-status .note {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.next-bus {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.next-bus h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.next-time {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0.25rem 0 0;
+}
+
+.timetable {
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.8rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.05);
+}
+
+.timetable-card {
+  background-color: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.4rem;
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.timetable-card header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.timetable-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.timetable-card .badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  background-color: var(--bg-secondary);
+}
+
+.timetable-card .notes {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.timetable-card table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.timetable-card th,
+.timetable-card td {
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.timetable-card th {
+  background-color: var(--bg-secondary);
+  font-weight: 600;
+}
+
+.timetable-card tbody tr:nth-child(odd) {
+  background-color: rgba(243, 246, 255, 0.5);
+}
+
+@media (max-width: 600px) {
+  .today {
+    padding: 1.3rem;
+  }
+
+  .date-selector {
+    padding: 0.9rem;
+  }
+
+  .date-selector__controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .date-selector button {
+    width: 100%;
+  }
+
+  .timetable {
+    padding: 1.3rem;
+  }
+}
