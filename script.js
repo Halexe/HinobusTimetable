@@ -216,8 +216,15 @@ const nextFromMinami = document.getElementById("next-from-minami");
 const nextFromHino = document.getElementById("next-from-hino");
 const timetableDescription = document.getElementById("timetable-description");
 const timetableWrapper = document.getElementById("timetable-wrapper");
+const datePicker = document.getElementById("selected-date");
+const resetDateButton = document.getElementById("reset-date");
 
 const patternCache = {};
+
+const DISPLAY_RANGE = {
+  min: "2025-10-01",
+  max: "2026-03-31",
+};
 
 function pad(num) {
   return String(num).padStart(2, "0");
@@ -225,6 +232,18 @@ function pad(num) {
 
 function toKey(date) {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}`;
+}
+
+function toInputValue(date) {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+function isSameDay(a, b) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
 }
 
 function getStatusForDate(date) {
@@ -310,15 +329,19 @@ function getPattern(key) {
   return pattern;
 }
 
-function findNextBus(statusKey, directionKey) {
+function findNextBus(statusKey, directionKey, targetDate) {
   const pattern = getPattern(statusKey);
   if (!pattern) return null;
 
-  const now = new Date();
-  const minutesNow = now.getHours() * 60 + now.getMinutes();
   const list = pattern[directionKey];
   if (!list || list.length === 0) return null;
 
+  const today = new Date();
+  if (!isSameDay(targetDate, today)) {
+    return { type: "scheduled", time: list[0] };
+  }
+
+  const minutesNow = today.getHours() * 60 + today.getMinutes();
   const upcoming = list.find((time) => parseTimeToMinutes(time) >= minutesNow);
   if (upcoming) {
     return { type: "today", time: upcoming };
@@ -326,17 +349,23 @@ function findNextBus(statusKey, directionKey) {
   return { type: "ended", time: list[0] };
 }
 
-function describeNextBus(result) {
+function describeNextBus(result, statusKey) {
   if (!result) {
-    return "運行予定なし";
+    if (statusKey === "no_service") {
+      return "運行予定なし";
+    }
+    return "時刻表の情報が見つかりません";
   }
   if (result.type === "today") {
     return `${result.time} 発予定`;
   }
+  if (result.type === "scheduled") {
+    return `始発 ${result.time}`;
+  }
   return `本日の運行は終了しました（始発 ${result.time}）`;
 }
 
-function renderTodayTimetable(statusKey) {
+function renderTodayTimetable(statusKey, isToday) {
   timetableWrapper.innerHTML = "";
 
   if (!statusKey) {
@@ -346,7 +375,9 @@ function renderTodayTimetable(statusKey) {
   }
 
   if (statusKey === "no_service") {
-    timetableDescription.textContent = "運休日のためバスは運行しません。";
+    timetableDescription.textContent = isToday
+      ? "本日は運休日のためバスは運行しません。"
+      : "選択した日は運休日のためバスは運行しません。";
     timetableWrapper.textContent = "次回の運行日にご利用ください。";
     return;
   }
@@ -437,19 +468,20 @@ function renderTodayTimetable(statusKey) {
   timetableWrapper.appendChild(card);
 }
 
-function renderToday() {
-  const now = new Date();
-  todayDate.textContent = formatDateLabel(now);
+function renderForDate(targetDate) {
+  todayDate.textContent = formatDateLabel(targetDate);
 
-  const statusKey = getStatusForDate(now);
+  const statusKey = getStatusForDate(targetDate);
   const statusInfo = statusKey ? STATUS_INFO[statusKey] : null;
+  const today = new Date();
+  const isToday = isSameDay(targetDate, today);
 
   if (!statusKey) {
     todayStatus.textContent = "資料に運行情報がありません";
     todayNote.textContent = "提供されている期間外の日付です。";
     nextFromMinami.textContent = "-";
     nextFromHino.textContent = "-";
-    renderTodayTimetable(statusKey);
+    renderTodayTimetable(statusKey, isToday);
     return;
   }
 
@@ -457,19 +489,66 @@ function renderToday() {
   if (statusInfo?.note) {
     todayNote.textContent = statusInfo.note;
   } else if (statusKey === "no_service") {
-    todayNote.textContent = "本日は運休日です。";
+    todayNote.textContent = isToday ? "本日は運休日です。" : "選択した日は運休日です。";
   } else {
-    todayNote.textContent = "";
+    todayNote.textContent = isToday ? "" : "選択した日の運行予定を表示しています。";
   }
 
-  nextFromMinami.textContent = describeNextBus(findNextBus(statusKey, "minamiToHino"));
-  nextFromHino.textContent = describeNextBus(findNextBus(statusKey, "hinoToMinami"));
+  nextFromMinami.textContent = describeNextBus(
+    findNextBus(statusKey, "minamiToHino", targetDate),
+    statusKey
+  );
+  nextFromHino.textContent = describeNextBus(
+    findNextBus(statusKey, "hinoToMinami", targetDate),
+    statusKey
+  );
 
-  renderTodayTimetable(statusKey);
+  renderTodayTimetable(statusKey, isToday);
 }
 
+function clampToRange(date) {
+  const min = new Date(DISPLAY_RANGE.min);
+  const max = new Date(DISPLAY_RANGE.max);
+
+  if (date < min) return min;
+  if (date > max) return max;
+  return date;
+}
+
+function initDatePicker(initialDate) {
+  if (!datePicker) return;
+
+  datePicker.min = DISPLAY_RANGE.min;
+  datePicker.max = DISPLAY_RANGE.max;
+  datePicker.value = toInputValue(initialDate);
+
+  datePicker.addEventListener("change", () => {
+    if (!datePicker.value) {
+      return;
+    }
+    currentDisplayDate = clampToRange(new Date(datePicker.value));
+    datePicker.value = toInputValue(currentDisplayDate);
+    renderForDate(currentDisplayDate);
+  });
+}
+
+let currentDisplayDate = clampToRange(new Date());
+
 function init() {
-  renderToday();
+  currentDisplayDate = clampToRange(new Date());
+  initDatePicker(currentDisplayDate);
+
+  if (resetDateButton) {
+    resetDateButton.addEventListener("click", () => {
+      currentDisplayDate = clampToRange(new Date());
+      if (datePicker) {
+        datePicker.value = toInputValue(currentDisplayDate);
+      }
+      renderForDate(currentDisplayDate);
+    });
+  }
+
+  renderForDate(currentDisplayDate);
 }
 
 document.addEventListener("DOMContentLoaded", init);
