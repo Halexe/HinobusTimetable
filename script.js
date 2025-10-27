@@ -1,212 +1,38 @@
 const STATUS_INFO = {
   normal: {
-    label: "2便（通常授業開講日及び試験期間）",
+    label: "通常運行（2台）",
     color: "var(--normal)",
+    note: "通常授業開講日および試験期間のダイヤです。",
     busType: "2便",
   },
   hino_full: {
-    label: "3・4便（日野デー臨時便終日運行）",
+    label: "日野デー臨時便（終日）",
     color: "var(--hino-full)",
-    note: "水曜日のみ<日野デー>の臨時便が終日運行します。",
-    busType: "3・4便",
+    note: "水曜日は日野デー臨時便を終日運行します。",
+    busType: "3台",
   },
   hino_pm: {
-    label: "3便（日野デー臨時便 午後便のみ運行）",
+    label: "日野デー臨時便（午後のみ）",
     color: "var(--hino-pm)",
-    note: "水曜日のみ<日野デー>の臨時便が午後のみ運行します。",
-    busType: "3便",
+    note: "木曜日は日野デー臨時便を午後のみ運行します。",
+    busType: "3台",
   },
   one_bus: {
-    label: "1便（集中授業日および補講期間）",
+    label: "集中講義期間（1台）",
     color: "var(--one-bus)",
-    busType: "1便",
+    note: "集中授業日や補講期間のダイヤです。",
+    busType: "1台",
   },
   no_service: {
-    label: "運休日（休業・休講日・土曜日等）",
+    label: "運休日（運行なし）",
     color: "var(--no-service)",
-    busType: "運休日",
+    busType: "運休",
   },
 };
 
-const scheduleData = {
-  "2025-10": {
-    1: "hino_pm",
-    2: "hino_full",
-    3: "normal",
-    6: "normal",
-    7: "normal",
-    8: "hino_pm",
-    9: "hino_full",
-    10: "normal",
-    13: "normal",
-    14: "normal",
-    15: "hino_pm",
-    16: "hino_full",
-    17: "normal",
-    20: "normal",
-    21: "normal",
-    22: "hino_pm",
-    23: "hino_full",
-    24: "normal",
-    27: "normal",
-    28: "normal",
-    29: "hino_pm",
-    30: "hino_full",
-    31: "normal",
-  },
-  "2025-11": {
-    3: "normal",
-    4: "normal",
-    5: "hino_pm",
-    6: "hino_full",
-    7: "normal",
-    10: "normal",
-    11: "normal",
-    12: "hino_pm",
-    13: "hino_full",
-    14: "normal",
-    17: "normal",
-    18: "normal",
-    19: "hino_pm",
-    20: "hino_full",
-    21: "normal",
-    24: "normal",
-    25: "normal",
-    26: "hino_pm",
-    27: "hino_full",
-    28: "normal",
-  },
-  "2025-12": {
-    1: "normal",
-    2: "normal",
-    3: "hino_pm",
-    4: "hino_full",
-    5: "normal",
-    8: "normal",
-    9: "normal",
-    10: "hino_pm",
-    11: "hino_full",
-    12: "normal",
-    15: "normal",
-    16: "normal",
-    17: "hino_pm",
-    18: "hino_full",
-    19: "normal",
-    22: "normal",
-    23: "normal",
-    24: "one_bus",
-    25: "one_bus",
-    26: "one_bus",
-  },
-  "2026-01": {
-    5: "one_bus",
-    6: "one_bus",
-    7: "one_bus",
-    8: "hino_pm",
-    9: "hino_full",
-    13: "hino_pm",
-    14: "hino_full",
-    15: "normal",
-    16: "normal",
-    19: "normal",
-    20: "normal",
-    21: "hino_pm",
-    22: "hino_full",
-    23: "normal",
-    26: "normal",
-    27: "normal",
-    28: "hino_pm",
-    29: "hino_full",
-    30: "normal",
-  },
-  "2026-02": {
-    2: "normal",
-    3: "normal",
-    4: "hino_pm",
-    5: "hino_full",
-    6: "normal",
-    9: "normal",
-    10: "one_bus",
-    11: "one_bus",
-    12: "one_bus",
-    13: "one_bus",
-    16: "normal",
-    17: "normal",
-    18: "hino_pm",
-    19: "hino_full",
-    20: "normal",
-    23: "normal",
-    24: "normal",
-    25: "hino_pm",
-    26: "hino_full",
-    27: "normal",
-  },
-  "2026-03": {},
-};
-
-const PATTERN_DEFS = {
-  normal: {
-    description: "通常授業開講日及び試験期間の時刻表",
-    times: {
-      minamiToHino: [
-        "7:45",
-        "8:30",
-        "9:10",
-        "9:45",
-        "10:35",
-        "12:10",
-        "13:00",
-        "13:45",
-        "14:40",
-        "15:25",
-        "16:25",
-        "17:10",
-        "18:05",
-        "18:45",
-      ],
-      hinoToMinami: [
-        "7:50",
-        "8:35",
-        "9:05",
-        "9:45",
-        "10:30",
-        "12:20",
-        "13:00",
-        "13:50",
-        "14:40",
-        "15:20",
-        "16:25",
-        "17:00",
-        "18:00",
-        "18:45",
-      ],
-    },
-  },
-  hino_full: {
-    description: "日野デー臨時便（終日）を含む時刻表",
-    notes: "水曜日は終日臨時便あり",
-    base: "normal",
-    extra: {
-      minamiToHino: ["7:40", "9:00", "10:30", "12:20", "13:50", "15:30", "17:00"],
-      hinoToMinami: ["8:25", "9:35", "11:00", "12:50", "14:45", "16:20", "18:05"],
-    },
-  },
-  hino_pm: {
-    description: "日野デー臨時便（午後のみ）を含む時刻表",
-    notes: "水曜日は午後のみ臨時便あり",
-    base: "normal",
-    extra: {
-      minamiToHino: ["13:50", "15:30", "17:00"],
-      hinoToMinami: ["14:45", "16:20", "18:05"],
-    },
-  },
-  one_bus: {
-    description: "集中授業日・補講期間の時刻表",
-    times: {
-      minamiToHino: ["7:47", "9:12", "10:37", "13:02", "14:42", "16:27", "18:07"],
-      hinoToMinami: ["7:35", "8:45", "12:20", "13:50", "17:00"],
-    },
-  },
+const DATA_PATHS = {
+  schedule: "data/schedule.json",
+  patterns: "data/patterns.json",
 };
 
 const todayDate = document.getElementById("today-date");
@@ -220,11 +46,11 @@ const datePicker = document.getElementById("selected-date");
 const resetDateButton = document.getElementById("reset-date");
 
 const patternCache = {};
-
-const DISPLAY_RANGE = {
-  min: "2025-10-01",
-  max: "2026-03-31",
-};
+let rawPatternDefinitions = {};
+let scheduleData = {};
+let displayRange = { min: "2025-10-01", max: "2026-02-28" };
+let dataLoaded = false;
+let currentDisplayDate = new Date();
 
 function pad(num) {
   return String(num).padStart(2, "0");
@@ -246,30 +72,47 @@ function isSameDay(a, b) {
   );
 }
 
-function getStatusForDate(date) {
-  const key = toKey(date);
-  const map = scheduleData[key];
-  const day = date.getDate();
-  const weekday = date.getDay();
-
-  if (map && map[day]) {
-    return map[day];
+async function fetchJson(url) {
+  const response = await fetch(url, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`Failed to load ${url}: ${response.status}`);
   }
-
-  if (map && (weekday === 0 || weekday === 6)) {
-    return "no_service";
-  }
-
-  return map ? "no_service" : null;
+  return response.json();
 }
 
-function formatDateLabel(date) {
-  return new Intl.DateTimeFormat("ja-JP", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    weekday: "long",
-  }).format(date);
+function sanitizeTimeValue(value) {
+  if (!value) {
+    return "";
+  }
+  const normalised = String(value)
+    .trim()
+    .replace(/[；;]/g, ":");
+  const match = normalised.match(/^(\d{1,2}):(\d{1,2})$/);
+  if (!match) {
+    return "";
+  }
+  const hour = Number(match[1]);
+  const minute = Number(match[2]);
+  if (
+    Number.isNaN(hour) ||
+    Number.isNaN(minute) ||
+    hour < 0 ||
+    hour > 23 ||
+    minute < 0 ||
+    minute > 59
+  ) {
+    return "";
+  }
+  return `${hour}:${pad(minute)}`;
+}
+
+function sanitizeTimeList(list) {
+  if (!Array.isArray(list)) {
+    return [];
+  }
+  return list
+    .map(sanitizeTimeValue)
+    .filter(Boolean);
 }
 
 function parseTimeToMinutes(timeStr) {
@@ -286,47 +129,184 @@ function mergeTimes(...lists) {
   return Array.from(unique).sort((a, b) => parseTimeToMinutes(a) - parseTimeToMinutes(b));
 }
 
+function clearTimetableWrapper() {
+  if (timetableWrapper) {
+    timetableWrapper.innerHTML = "";
+  }
+}
+
+function renderMessageCard(primary, secondary) {
+  if (!timetableWrapper) {
+    return;
+  }
+  const card = document.createElement("article");
+  card.className = "timetable-card timetable-card--message";
+
+  if (primary) {
+    const primaryEl = document.createElement("p");
+    primaryEl.className = "message-primary";
+    primaryEl.textContent = primary;
+    card.appendChild(primaryEl);
+  }
+
+  if (secondary) {
+    const secondaryEl = document.createElement("p");
+    secondaryEl.className = "message-secondary";
+    secondaryEl.textContent = secondary;
+    card.appendChild(secondaryEl);
+  }
+
+  timetableWrapper.appendChild(card);
+}
+
+function renderLoadingState(targetDate) {
+  const referenceDate = targetDate ?? currentDisplayDate;
+  todayDate.textContent = formatDateLabel(referenceDate);
+  todayStatus.textContent = "データ読み込み中…";
+  todayNote.textContent = "";
+  nextFromMinami.textContent = "-";
+  nextFromHino.textContent = "-";
+  timetableDescription.textContent = "";
+  clearTimetableWrapper();
+  renderMessageCard("データを読み込み中です…");
+}
+
+function renderDataLoadError() {
+  dataLoaded = false;
+  todayStatus.textContent = "データの読み込みに失敗しました";
+  todayNote.textContent = "ネットワーク環境を確認し、再読み込みしてください。";
+  nextFromMinami.textContent = "-";
+  nextFromHino.textContent = "-";
+  timetableDescription.textContent = "";
+  clearTimetableWrapper();
+  renderMessageCard("データの取得に失敗しました。", "ページを再読み込みしてください。");
+}
+
+function normalizePatterns(patterns) {
+  const normalised = {};
+  Object.entries(patterns ?? {}).forEach(([key, value]) => {
+    if (!value || typeof value !== "object") {
+      return;
+    }
+    normalised[key] = {
+      description: value.description ?? "",
+      notes: value.notes ?? "",
+      minami_to_hino: Array.isArray(value.minami_to_hino) ? value.minami_to_hino : [],
+      hino_to_minami: Array.isArray(value.hino_to_minami) ? value.hino_to_minami : [],
+    };
+  });
+  return normalised;
+}
+
+function computeDisplayRangeFromMonths(months) {
+  if (!months.length) {
+    return null;
+  }
+  const sorted = months
+    .map(({ year, month }) => ({ year, month }))
+    .sort((a, b) => (a.year === b.year ? a.month - b.month : a.year - b.year));
+  const first = sorted[0];
+  const last = sorted[sorted.length - 1];
+  const minDate = new Date(first.year, first.month - 1, 1);
+  const maxDate = new Date(last.year, last.month, 0);
+  return {
+    min: toInputValue(minDate),
+    max: toInputValue(maxDate),
+  };
+}
+
+function normalizeSchedule(schedule) {
+  const normalised = {};
+  const months = [];
+
+  Object.entries(schedule ?? {}).forEach(([monthKey, days]) => {
+    if (typeof monthKey !== "string") {
+      return;
+    }
+    const [yearStr, monthStr] = monthKey.split("-");
+    const year = Number(yearStr);
+    const month = Number(monthStr);
+    if (!Number.isFinite(year) || !Number.isFinite(month)) {
+      return;
+    }
+
+    const cleanedDays = {};
+    Object.entries(days ?? {}).forEach(([dayKey, status]) => {
+      const day = Number(dayKey);
+      if (!Number.isFinite(day) || !status) {
+        return;
+      }
+      cleanedDays[String(day)] = status;
+    });
+
+    const normalizedMonthKey = `${year}-${pad(month)}`;
+    normalised[normalizedMonthKey] = cleanedDays;
+    months.push({ year, month });
+  });
+
+  return {
+    schedule: normalised,
+    range: computeDisplayRangeFromMonths(months),
+  };
+}
+
+function applyDisplayRange() {
+  if (!datePicker) {
+    return;
+  }
+  datePicker.min = displayRange.min;
+  datePicker.max = displayRange.max;
+}
+
+function setPatternDefinitions(definitions) {
+  rawPatternDefinitions = definitions;
+  Object.keys(patternCache).forEach((key) => {
+    delete patternCache[key];
+  });
+}
+
 function getPattern(key) {
   if (patternCache[key]) {
     return patternCache[key];
   }
-
-  const def = PATTERN_DEFS[key];
-  if (!def) {
+  const definition = rawPatternDefinitions[key];
+  if (!definition) {
     return null;
   }
-
-  let basePattern = { minamiToHino: [], hinoToMinami: [] };
-  if (def.base) {
-    const resolvedBase = getPattern(def.base);
-    if (resolvedBase) {
-      basePattern = {
-        minamiToHino: [...resolvedBase.minamiToHino],
-        hinoToMinami: [...resolvedBase.hinoToMinami],
-      };
-    }
-  }
-
-  const times = def.times ?? {};
-  const extra = def.extra ?? {};
-
   const pattern = {
-    description: def.description,
-    notes: def.notes,
-    minamiToHino: mergeTimes(
-      basePattern.minamiToHino,
-      times.minamiToHino ?? [],
-      extra.minamiToHino ?? []
-    ),
-    hinoToMinami: mergeTimes(
-      basePattern.hinoToMinami,
-      times.hinoToMinami ?? [],
-      extra.hinoToMinami ?? []
-    ),
+    description: definition.description ?? "",
+    notes: definition.notes ?? "",
+    minamiToHino: mergeTimes(sanitizeTimeList(definition.minami_to_hino)),
+    hinoToMinami: mergeTimes(sanitizeTimeList(definition.hino_to_minami)),
   };
-
   patternCache[key] = pattern;
   return pattern;
+}
+
+function getStatusForDate(date) {
+  const key = toKey(date);
+  const map = scheduleData[key];
+  const dayKey = String(date.getDate());
+  const weekday = date.getDay();
+
+  if (map && map[dayKey]) {
+    return map[dayKey];
+  }
+
+  if (map && (weekday === 0 || weekday === 6)) {
+    return "no_service";
+  }
+
+  return map ? "no_service" : null;
+}
+
+function formatDateLabel(date) {
+  return new Intl.DateTimeFormat("ja-JP", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
+  }).format(date);
 }
 
 function findNextBus(statusKey, directionKey, targetDate) {
@@ -366,11 +346,11 @@ function describeNextBus(result, statusKey) {
 }
 
 function renderTodayTimetable(statusKey, isToday) {
-  timetableWrapper.innerHTML = "";
+  clearTimetableWrapper();
 
   if (!statusKey) {
     timetableDescription.textContent = "提供期間外の日付のため時刻表は表示できません。";
-    timetableWrapper.textContent = "資料に時刻表がありません。";
+    renderMessageCard("資料に時刻表がありません。", "提供期間内の日付を選択してください。");
     return;
   }
 
@@ -378,14 +358,14 @@ function renderTodayTimetable(statusKey, isToday) {
     timetableDescription.textContent = isToday
       ? "本日は運休日のためバスは運行しません。"
       : "選択した日は運休日のためバスは運行しません。";
-    timetableWrapper.textContent = "次回の運行日にご利用ください。";
+    renderMessageCard("運休日です", "次回の運行日にご利用ください。");
     return;
   }
 
   const pattern = getPattern(statusKey);
   if (!pattern) {
     timetableDescription.textContent = "該当する時刻表情報がありません。";
-    timetableWrapper.textContent = "管理者にお問い合わせください。";
+    renderMessageCard("時刻表データが見つかりません。", "管理者にお問い合わせください。");
     return;
   }
 
@@ -409,12 +389,16 @@ function renderTodayTimetable(statusKey, isToday) {
 
   card.appendChild(header);
 
-  const desc = document.createElement("p");
-  desc.className = "notes";
-  desc.textContent = pattern.description;
-  card.appendChild(desc);
+  if (pattern.description) {
+    const desc = document.createElement("p");
+    desc.className = "notes";
+    desc.textContent = pattern.description;
+    card.appendChild(desc);
+  }
 
-  const notePieces = [statusInfo?.note, pattern.notes].filter(Boolean);
+  const notePieces = [statusInfo?.note, pattern.notes]
+    .filter(Boolean)
+    .filter((value, index, array) => array.indexOf(value) === index);
   if (notePieces.length) {
     const note = document.createElement("p");
     note.className = "notes";
@@ -471,6 +455,11 @@ function renderTodayTimetable(statusKey, isToday) {
 function renderForDate(targetDate) {
   todayDate.textContent = formatDateLabel(targetDate);
 
+  if (!dataLoaded) {
+    renderLoadingState(targetDate);
+    return;
+  }
+
   const statusKey = getStatusForDate(targetDate);
   const statusInfo = statusKey ? STATUS_INFO[statusKey] : null;
   const today = new Date();
@@ -507,19 +496,18 @@ function renderForDate(targetDate) {
 }
 
 function clampToRange(date) {
-  const min = new Date(DISPLAY_RANGE.min);
-  const max = new Date(DISPLAY_RANGE.max);
+  const min = new Date(displayRange.min);
+  const max = new Date(displayRange.max);
 
-  if (date < min) return min;
-  if (date > max) return max;
+  if (date < min) return new Date(min);
+  if (date > max) return new Date(max);
   return date;
 }
 
 function initDatePicker(initialDate) {
   if (!datePicker) return;
 
-  datePicker.min = DISPLAY_RANGE.min;
-  datePicker.max = DISPLAY_RANGE.max;
+  applyDisplayRange();
   datePicker.value = toInputValue(initialDate);
 
   datePicker.addEventListener("change", () => {
@@ -532,7 +520,36 @@ function initDatePicker(initialDate) {
   });
 }
 
-let currentDisplayDate = clampToRange(new Date());
+async function loadData() {
+  try {
+    const [scheduleJson, patternJson] = await Promise.all([
+      fetchJson(DATA_PATHS.schedule),
+      fetchJson(DATA_PATHS.patterns),
+    ]);
+
+    const { schedule, range } = normalizeSchedule(scheduleJson);
+    scheduleData = schedule;
+
+    const patterns = normalizePatterns(patternJson);
+    setPatternDefinitions(patterns);
+
+    if (range) {
+      displayRange = range;
+      applyDisplayRange();
+    }
+
+    currentDisplayDate = clampToRange(currentDisplayDate);
+    if (datePicker) {
+      datePicker.value = toInputValue(currentDisplayDate);
+    }
+
+    dataLoaded = true;
+    renderForDate(currentDisplayDate);
+  } catch (error) {
+    console.error(error);
+    renderDataLoadError();
+  }
+}
 
 function init() {
   currentDisplayDate = clampToRange(new Date());
@@ -548,7 +565,8 @@ function init() {
     });
   }
 
-  renderForDate(currentDisplayDate);
+  renderLoadingState(currentDisplayDate);
+  loadData();
 }
 
 document.addEventListener("DOMContentLoaded", init);
