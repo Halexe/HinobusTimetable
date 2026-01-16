@@ -71,17 +71,18 @@
     "7": "hino_full",
     "8": "hino_pm",
     "9": "normal",
-    "12": "normal",
-    "15": "normal",
+    "14": "hino_full",
+    "15": "hino_pm",
     "16": "normal",
-    "17": "hino_full",
-    "18": "hino_pm",
     "19": "normal",
-    "22": "normal",
-    "23": "normal",
-    "24": "one_bus",
-    "25": "one_bus",
-    "26": "one_bus"
+    "20": "normal",
+    "21":"hino_full",
+    "22":"hino_pm",
+    "26": "one_bus",
+    "27": "one_bus",
+    "28": "hino_full"
+    "29":"hino_pm",
+    "30":"normal"
   },
   "2026-02": {
     "2": "normal",
