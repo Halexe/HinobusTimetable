@@ -48,7 +48,7 @@ const resetDateButton = document.getElementById("reset-date");
 const patternCache = {};
 let rawPatternDefinitions = {};
 let scheduleData = {};
-let displayRange = { min: "2025-10-01", max: "2026-02-28" };
+let displayRange = { min: "2025-10-01", max: "2026-09-30" };
 let dataLoaded = false;
 let currentDisplayDate = new Date();
 
