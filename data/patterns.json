@@ -25,16 +25,6 @@
       "18:05",
       "18:45"
     ],
-     "april_fool": {
-    "description": "エイプリルフール",
-    "notes": "エイプリルフール用のイースターエッグ",
-    "minami_to_hino": [
-      "33:4"
-    ],
-    "hino_to_minami": [
-      "33:4"
-    ]
-  },
   "hino_pm": {
     "description": "3台運行日（木曜日）",
     "notes": "木曜日のみ<日野デー>運行",
