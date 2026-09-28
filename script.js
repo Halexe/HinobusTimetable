@@ -358,7 +358,7 @@ function renderTodayTimetable(statusKey, isToday) {
     timetableDescription.textContent = isToday
       ? "本日は運休日のためバスは運行しません。"
       : "選択した日は運休日のためバスは運行しません。";
-    renderMessageCard("運休日です", "次回の運行日にご利用ください。");
+    renderMessageCard("運休日です");
     return;
   }
 
