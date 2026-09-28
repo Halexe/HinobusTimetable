@@ -31,11 +31,11 @@
 <body>
 <h1>2026年度後期 スケジュール確認</h1>
 <div class="legend">
-  <div class="legend-item"><div class="legend-swatch" style="background:#ffd54f"></div>水曜3台（bus3_wed）</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#ffcc80"></div>木曜3台（bus3_thu）</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#f8bbd0"></div>通常2台（bus2）</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#fff9c4"></div>1台（bus1）</div>
-  <div class="legend-item"><div class="legend-swatch" style="background:#f5f5f5"></div>運休</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#ffd54f"></div>3台運行日（日野デー臨時便終日運行）</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#ffcc80"></div>3台運行日（日野デー臨時便午後便のみ運行）</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#f8bbd0"></div>2台運行日（通常授業開講日及び試験期間）</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#fff9c4"></div>1台臨時便運行日（集中授業・補講期間）</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#f5f5f5"></div>運休日（休業、休講日）</div>
 </div>
 <div class="months" id="months"></div>
 
@@ -51,6 +51,14 @@ const SCHEDULE = {
 const MONTH_NAMES = {
   "2026-10": "2026年10月", "2026-11": "2026年11月", "2026-12": "2026年12月",
   "2027-01": "2027年1月", "2027-02": "2027年2月"
+};
+
+const PATTERN_LABELS = {
+  bus3_wed: "3台運行日（日野デー臨時便終日運行）",
+  bus3_thu: "3台運行日（日野デー臨時便午後便のみ運行）",
+  bus2: "2台運行日（通常授業開講日及び試験期間）",
+  bus1: "1台臨時便運行日（集中授業・補講期間）",
+  no_service: "運休日（休業、休講日）",
 };
 
 const DOW = ["日","月","火","水","木","金","土"];
@@ -77,7 +85,7 @@ function renderMonth(key) {
     const pattern = days[String(d)];
     const cls = pattern || (dow === 0 ? "" : dow === 6 ? "" : "no_service");
     const dowCls = dow === 0 ? " sun" : dow === 6 ? " sat" : "";
-    html += `<td class="${cls}${dowCls}" title="${pattern || "運休"}">${d}</td>`;
+    html += `<td class="${cls}${dowCls}" title="${PATTERN_LABELS[pattern] || "運休日（休業、休講日）"}">${d}</td>`;
   }
 
   html += `</tr></table><div class="count">運行日数: ${count}日</div></div>`;
