@@ -1,23 +1,23 @@
 const STATUS_INFO = {
-  normal: {
+  bus2: {
     label: "通常運行（2台）",
     color: "var(--normal)",
     note: "通常授業開講日および試験期間のダイヤです。",
     busType: "2便",
   },
-  hino_full: {
+  bus3_wed: {
     label: "日野デー臨時便（終日）",
     color: "var(--hino-full)",
     note: "水曜日は日野デー臨時便を終日運行します。",
     busType: "3台",
   },
-  hino_pm: {
+  bus3_thu: {
     label: "日野デー臨時便（午後のみ）",
     color: "var(--hino-pm)",
     note: "木曜日は日野デー臨時便を午後のみ運行します。",
     busType: "3台",
   },
-  one_bus: {
+  bus1: {
     label: "集中講義期間（1台）",
     color: "var(--one-bus)",
     note: "集中授業日や補講期間のダイヤです。",

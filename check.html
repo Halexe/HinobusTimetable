@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>スケジュール確認（2026年度後期）</title>
+  <style>
+    body { font-family: sans-serif; padding: 16px; background: #f5f5f5; }
+    h1 { font-size: 1.1rem; margin-bottom: 8px; }
+    .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; font-size: 0.8rem; }
+    .legend-item { display: flex; align-items: center; gap: 4px; }
+    .legend-swatch { width: 16px; height: 16px; border-radius: 3px; border: 1px solid #ccc; }
+    .months { display: flex; flex-wrap: wrap; gap: 20px; }
+    .month { background: white; border-radius: 8px; padding: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .month h2 { font-size: 0.95rem; margin: 0 0 8px; }
+    table { border-collapse: collapse; }
+    th { font-size: 0.75rem; width: 32px; text-align: center; padding: 2px; color: #666; }
+    th.sun { color: #e00; }
+    th.sat { color: #00c; }
+    td { width: 32px; height: 32px; text-align: center; font-size: 0.8rem; border-radius: 4px; }
+    td.empty { background: none; }
+    td.sun { color: #e00; }
+    td.sat { color: #00c; }
+    td.bus3_wed { background: #ffd54f; font-weight: bold; }
+    td.bus3_thu { background: #ffcc80; font-weight: bold; }
+    td.bus2 { background: #f8bbd0; }
+    td.bus1 { background: #fff9c4; }
+    td.no_service { background: #f5f5f5; color: #bbb; }
+    .count { font-size: 0.75rem; color: #888; margin-top: 6px; }
+  </style>
+</head>
+<body>
+<h1>2026年度後期 スケジュール確認</h1>
+<div class="legend">
+  <div class="legend-item"><div class="legend-swatch" style="background:#ffd54f"></div>水曜3台（bus3_wed）</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#ffcc80"></div>木曜3台（bus3_thu）</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#f8bbd0"></div>通常2台（bus2）</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#fff9c4"></div>1台（bus1）</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#f5f5f5"></div>運休</div>
+</div>
+<div class="months" id="months"></div>
+
+<script>
+const SCHEDULE = {
+  "2026-10": {"1":"bus3_thu","2":"bus2","5":"bus2","6":"bus2","7":"bus3_wed","8":"bus3_thu","9":"bus2","13":"bus2","14":"bus3_wed","15":"bus3_thu","16":"bus2","19":"bus2","20":"bus2","21":"bus3_wed","22":"bus3_thu","23":"bus2","26":"bus2","27":"bus2","28":"bus3_wed","29":"bus3_thu","30":"bus2"},
+  "2026-11": {"4":"bus3_wed","5":"bus3_thu","6":"bus2","9":"bus2","10":"bus2","11":"bus3_wed","12":"bus3_thu","13":"bus2","16":"bus2","17":"bus2","18":"bus3_wed","19":"bus3_thu","20":"bus2","23":"bus2","24":"bus2","25":"bus3_wed","26":"bus3_thu","27":"bus2","30":"bus2"},
+  "2026-12": {"1":"bus2","2":"bus3_wed","3":"bus3_thu","4":"bus2","7":"bus2","8":"bus2","9":"bus3_wed","10":"bus3_thu","11":"bus2","14":"bus2","15":"bus2","16":"bus3_wed","17":"bus3_thu","18":"bus2","21":"bus2","22":"bus2","23":"bus3_wed","24":"bus1","25":"bus1","28":"bus2"},
+  "2027-01": {"5":"bus2","6":"bus3_wed","7":"bus3_thu","8":"bus2","12":"bus2","13":"bus3_wed","14":"bus3_thu","15":"bus2","18":"bus2","19":"bus2","20":"bus3_wed","21":"bus3_thu","22":"bus2","25":"bus2","26":"bus2","27":"bus3_wed","28":"bus3_thu","29":"bus2"},
+  "2027-02": {"1":"bus2","2":"bus2","3":"bus3_wed","4":"bus3_thu","5":"bus2","8":"bus2","9":"bus1","10":"bus1","12":"bus1"}
+};
+
+const MONTH_NAMES = {
+  "2026-10": "2026年10月", "2026-11": "2026年11月", "2026-12": "2026年12月",
+  "2027-01": "2027年1月", "2027-02": "2027年2月"
+};
+
+const DOW = ["日","月","火","水","木","金","土"];
+
+function renderMonth(key) {
+  const [year, mon] = key.split("-").map(Number);
+  const days = SCHEDULE[key];
+  const firstDow = new Date(year, mon - 1, 1).getDay();
+  const lastDay = new Date(year, mon, 0).getDate();
+
+  let count = Object.keys(days).length;
+  let html = `<div class="month"><h2>${MONTH_NAMES[key]}</h2><table><tr>`;
+  DOW.forEach((d, i) => {
+    const cls = i === 0 ? "sun" : i === 6 ? "sat" : "";
+    html += `<th class="${cls}">${d}</th>`;
+  });
+  html += "</tr><tr>";
+
+  for (let i = 0; i < firstDow; i++) html += `<td class="empty"></td>`;
+
+  for (let d = 1; d <= lastDay; d++) {
+    const dow = new Date(year, mon - 1, d).getDay();
+    if (dow === 0 && d !== 1) html += "</tr><tr>";
+    const pattern = days[String(d)];
+    const cls = pattern || (dow === 0 ? "" : dow === 6 ? "" : "no_service");
+    const dowCls = dow === 0 ? " sun" : dow === 6 ? " sat" : "";
+    html += `<td class="${cls}${dowCls}" title="${pattern || "運休"}">${d}</td>`;
+  }
+
+  html += `</tr></table><div class="count">運行日数: ${count}日</div></div>`;
+  return html;
+}
+
+const container = document.getElementById("months");
+Object.keys(SCHEDULE).forEach(key => {
+  container.innerHTML += renderMonth(key);
+});
+</script>
+</body>
+</html>
