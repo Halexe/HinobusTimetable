@@ -1,7 +1,5 @@
 {
   "bus3_wed": {
-    "description": "3台運行日(水曜日）",
-    "notes": "水曜日のみ<日野デー>運行",
     "minami_to_hino": [
       "7:40",
       "7:45",
@@ -50,8 +48,6 @@
     ]
   },
   "bus3_thu": {
-    "description": "3台運行日（木曜日）",
-    "notes": "木曜日のみ<日野デー>運行",
     "minami_to_hino": [
       "7:45",
       "8:30",
